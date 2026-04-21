@@ -131,7 +131,7 @@ class Ipod extends Component {
     //right button navigation
     handleForward = () => {
         if (this.state.screenMode === "CONTENT") {
-            if (this.activeContent === "music") {
+            if (this.state.activeContent === "music") {
                 this.nextSong(); // Only works if we are in the player
             }
             return;
