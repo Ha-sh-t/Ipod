@@ -5,8 +5,6 @@ Overview
 
 This is a mini frontend project built using React that mimics the classic Apple iPod interface. The goal of this project is to recreate the core interaction experience of an iPod, particularly the circular navigation wheel and menu-based UI, in a web environment.
 
-This project is built using React class components (legacy approach) to demonstrate understanding of state management, lifecycle methods, and event handling without hooks.
-
 The project focuses more on interaction design and UI behavior rather than feature completeness.
 
 ⸻
