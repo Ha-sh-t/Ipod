@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from 'styled-components';
 import MenuList from "./MenuList";
 import Content from "./Content"; // This will act as your "App Router"
-import bgImage from "../../assets/images/backbround.jpeg"
+import bgImage from "../../assets/images/background.jpeg"
 const DisplayDiv = styled.div`
 position:relative;
     width: 258px;

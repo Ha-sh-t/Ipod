@@ -20,7 +20,7 @@ class Ipod extends Component {
 
             //Media States
             isPlaying: false,
-            currentSongIndex:0,
+            currentSongIndex: 0,
             totalSongs: 3,
 
             //Interaction
@@ -29,14 +29,7 @@ class Ipod extends Component {
         this.audio = createRef();
     }
 
-    componentDidMount() {
-        this.setState({
-            list: this.options,
-            data: { title: '', content: null }
-        });
-
-    }
-    handleWheelMove = (e) => {
+    handleWheelMove = (e) => { //using angle logic for wheel rotation interaction
 
         const { prevAngle, screenMode, menuStack, cursor } = this.state;
 
@@ -53,7 +46,8 @@ class Ipod extends Component {
         if (delta > 180) delta -= 360;
         if (delta < -180) delta += 360;
 
-        const threshold = 35
+        const threshold = 35//with change of at least 35 deg we move up/down on list
+
         const currentMenu = menuStack[menuStack.length - 1];
         const listLength = currentMenu.children.length;
         if (Math.abs(delta) > threshold) {
@@ -155,37 +149,38 @@ class Ipod extends Component {
     handlePlayPauseButton = () => {
 
         // This button works globally or specifically in content mode
-        if(this.state.screenMode === "CONTENT"){
-            if(this.state.activeContent === "music"){
-            this.handlePlayPause();
+        if (this.state.screenMode === "CONTENT") {
+            if (this.state.activeContent === "music") {
+                this.handlePlayPause();
 
             }
         }
         return
     };
 
-handlePlayPause = () => {
-    const { isPlaying } = this.state;
+    handlePlayPause = () => {
+        const { isPlaying } = this.state;
 
-    if (this.audio.current) {
-        if (isPlaying) {
-            this.audio.current.pause();
-        } else {
-            this.audio.current.play();
+        if (this.audio.current) {
+            if (isPlaying) {
+                this.audio.current.pause();
+            } else {
+                this.audio.current.play();
+            }
+
+            // Just flip the boolean
+            this.toggleAudioIcon();
         }
-        
-        // Just flip the boolean
-        this.toggleAudioIcon();
     }
-}
-    toggleAudioIcon = (action='')=>{
-    const { isPlaying } = this.state;
 
-        if(action){
-            this.setState({isPlaying:false});
+    toggleAudioIcon = (action = '') => {
+        const { isPlaying } = this.state;
+
+        if (action) {
+            this.setState({ isPlaying: false });
         }
-        else{
-        this.setState({ isPlaying: !isPlaying });
+        else {
+            this.setState({ isPlaying: !isPlaying });
 
         }
     }
@@ -206,22 +201,12 @@ handlePlayPause = () => {
             this.audio.current.play();
         }
         this.setState({
-            isPlaying:true
+            isPlaying: true
         })
     }
 
 
 
-    stopAudio = () => {
-        if (this.audio.current) {
-            this.audio.current.pause();
-            this.audio.current.currentTime = 0;//reset song time
-        }
-        this.setState({
-            isPlaying: false,
-            currentSongIndex:0//reset the player , jump back to first song
-        });
-    }
     nextSong = () => {
         this.setState((prevState) => ({
             // Wrap around logic: (0 + 1) % 3 = 1; (2 + 1) % 3 = 0
@@ -249,65 +234,65 @@ handlePlayPause = () => {
     }
 
 
-getCurrentMenu = () => {
-    const { menuStack } = this.state;
-    return menuStack[menuStack.length - 1]; // Returns the current active menu object
-};
+    getCurrentMenu = () => {
+        const { menuStack } = this.state;
+        return menuStack[menuStack.length - 1]; // Returns the current active menu object
+    };
 
 
 
-render() {
-    const { 
-        cursor, 
-        screenMode, 
-        activeContent, 
-        isPlaying, 
-        currentSongIndex, 
-        totalSongs 
-    } = this.state;
+    render() {
+        const {
+            cursor,
+            screenMode,
+            activeContent,
+            isPlaying,
+            currentSongIndex,
+            totalSongs
+        } = this.state;
 
-    const currentMenu = this.getCurrentMenu();
+        const currentMenu = this.getCurrentMenu();
 
-    return (
-        <div className={styles.ipod}>
-            {/* The physical body of the iPod */}
-            <img src={ipodImage} alt="ipod" className={styles["ipod-image"]} />
-            <img src={ipodImage} alt="ipod-reflection" className={styles["reflection-image"]} />
+        return (
+            <div className={styles.ipod}>
+                {/* The physical body of the iPod */}
+                <img src={ipodImage} alt="ipod" className={styles["ipod-image"]} />
+                <img src={ipodImage} alt="ipod-reflection" className={styles["reflection-image"]} />
 
-            {/* 1. DISPLAY COMPONENT: The "Eyes" */}
-            <Display
-                screenMode={screenMode}      // "MENU" or "CONTENT"
-                menuTitle={currentMenu.title} // e.g., "Music" or "Settings"
-                list={currentMenu.children}  // The current sub-menu array
-                cursor={cursor}              // Highlighted index
-                activeContent={activeContent}// e.g., 'music', 'game', 'empty'
-                
-                // Media props
-                isPlaying={isPlaying}
-                toggleAudioIcon = {this.toggleAudioIcon}
-                currentSongIndex={currentSongIndex}
-                totalSongs={totalSongs}
-                audioRef={this.audio}
-            />
+                {/* 1. DISPLAY COMPONENT: The "Eyes" */}
+                <Display
+                    screenMode={screenMode}      // "MENU" or "CONTENT"
+                    menuTitle={currentMenu.title} // e.g., "Music" or "Settings"
+                    list={currentMenu.children}  // The current sub-menu array
+                    cursor={cursor}              // Highlighted index
+                    activeContent={activeContent}// e.g., 'music', 'game', 'empty'
 
-            {/* 2. BUTTONS/CLICKWHEEL: The "Hands" */}
-            <Button
-                // Navigation
-                onMenuClick={this.handleMenuButton}
-                onCenterClick={this.handleClick}
-                onWheel={this.handleWheelMove}
-                
-                // Media Controls
-                onPlayPause={this.handlePlayPauseButton}
-                onNext={this.handleForward}
-                onPrev={this.handleBackward}
-                
-                // Context-awareness (to disable wheel in content mode)
-                isContentMode={screenMode === "CONTENT"}
-            />
-        </div>
-    );
-}
+                    // Media props
+                    isPlaying={isPlaying}
+                    toggleAudioIcon={this.toggleAudioIcon}
+                    currentSongIndex={currentSongIndex}
+                    totalSongs={totalSongs}
+                    audioRef={this.audio}
+                />
+
+                {/* 2. BUTTONS/CLICKWHEEL: The "Hands" */}
+                <Button
+                    // Navigation
+                    onMenuClick={this.handleMenuButton}
+                    onCenterClick={this.handleClick}
+                    onWheel={this.handleWheelMove}
+
+                    // Media Controls
+                    onPlayPause={this.handlePlayPauseButton}
+                    onNext={this.handleForward}
+                    onPrev={this.handleBackward}
+
+                    // Context-awareness (to disable wheel in content mode)
+                    isContentMode={screenMode === "CONTENT"}
+                />
+            </div>
+        );
+    }
 }
 
 export default Ipod;
