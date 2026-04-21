@@ -12,7 +12,7 @@ The project focuses more on interaction design and UI behavior rather than featu
 Features
 
 Music Player
-	•	Includes a functional music player with 5 preloaded songs
+	•	Includes a functional music player with 3 preloaded songs
 	•	Supports:
 	•	Play / Pause
 	•	Track navigation
